@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Video Downloader</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 20px; 
+      background: #f2f2f2; 
+    }
+    input, button { 
+      padding: 12px; 
+      margin: 10px 5px; 
+      font-size: 16px; 
+      width: 90%;
+      max-width: 500px;
+      box-sizing: border-box;
+    }
+    button { 
+      cursor: pointer; 
+      background-color: #4267B2; 
+      color: white; 
+      border: none; 
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    button:hover { background-color: #365899; }
+    #logo { 
+      display: block; 
+      margin: 20px auto; 
+      max-width: 150px; 
+      height: auto; 
+    }
+    #instruction {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    #result { 
+      margin-top: 20px; 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 8px; 
+      max-width: 700px; 
+      margin-left: auto; 
+      margin-right: auto; 
+      text-align: left; 
+      word-wrap: break-word; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    video, audio { 
+      max-width: 100%; 
+      margin-top: 10px; 
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 24px; }
+      input, button { font-size: 14px; }
+      #instruction { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Facebook Video Downloader</h1>
+  <input type="text" id="videoUrl" placeholder="Paste Facebook video URL here">
+  <button onclick="fetchVideo()">Get Video Info</button>
+  <img id="logo" src="logo.png" alt="Logo">
+  <div id="instruction">Click the three dots at the bottom-right of the video or audio to download.</div>
+  <div id="result"></div>
+
+  <script>
+    const backendUrl = "https://fb-br2r.onrender.com"; // Your backend URL
+
+    async function fetchVideo() {
+      const url = document.getElementById('videoUrl').value;
+      const resultDiv = document.getElementById('result');
+      if (!url) { 
+        alert("Please enter a video URL!"); 
+        return; 
+      }
+
+      resultDiv.innerHTML = "Fetching video info...";
+
+      try {
+        const res = await fetch(`${backendUrl}/download?url=${encodeURIComponent(url)}`);
+        if (!res.ok) throw new Error("Error fetching video info");
+
+        const data = await res.json();
+
+        let html = `<h3>${data.title}</h3>`;
+        html += `<p><strong>Uploader:</strong> ${data.uploader}</p>`;
+        html += `<p><strong>Duration:</strong> ${data.duration} seconds</p>`;
+
+        // Get best video & audio formats
+        const videoFormat = data.formats.find(f => f.ext === "mp4") || data.formats[0];
+        const audioFormat = data.formats.find(f => f.ext === "m4a") || data.formats[0];
+
+        html += `<h4>Preview:</h4>`;
+        html += `<video controls src="${videoFormat.url}"></video>`;
+        html += `<audio controls src="${audioFormat.url}"></audio>`;
+
+        resultDiv.innerHTML = html;
+      } catch (err) {
+        resultDiv.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

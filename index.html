@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Facebook Video Downloader</title>
+  <title>FBGrab </title>
   <style>
     body { 
       font-family: Arial, sans-serif; 
       text-align: center; 
-      padding: 20px; 
+      padding: 20px 10px; 
       background: #f2f2f2; 
+      margin: 0;
     }
     input, button { 
       padding: 12px; 
@@ -56,27 +57,74 @@
       max-width: 100%; 
       margin-top: 10px; 
     }
+    /* Banner wrapper style to center ads */
+    .banner-ad {
+      margin: 10px auto;
+      display: block;
+      max-width: 100%;
+    }
+
     @media (max-width: 600px) {
       h1 { font-size: 24px; }
       input, button { font-size: 14px; }
       #instruction { font-size: 12px; }
+      .banner-ad iframe { width: 100% !important; height: auto !important; }
     }
   </style>
 </head>
+
 <body>
-  <h1>Facebook Video Downloader</h1>
+  <h1>FBGrab</h1>
+
+  <!-- 🔝 Top Banner Ad -->
+  <div class="banner-ad" id="top-banner">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '1df366c332a6ff7db3bad3b6a13e882f',
+        'format' : 'iframe',
+        'height' : 250,
+        'width' : 300,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/1df366c332a6ff7db3bad3b6a13e882f/invoke.js"></script>
+  </div>
+
   <input type="text" id="videoUrl" placeholder="Paste Facebook video URL here">
   <button onclick="fetchVideo()">Get Video Info</button>
+
   <img id="logo" src="logo.png" alt="Logo">
-  <div id="instruction">Click the three dots at the bottom-right of the video or audio to download.</div>
+
+  <div id="instruction">
+    Click the three dots at the bottom-right of the video or audio to download.
+  </div>
+
   <div id="result"></div>
 
+  <!-- 🔽 Bottom Banner Ad -->
+  <div class="banner-ad" id="bottom-banner">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '3bd6f61ebf6821c422921b228580f065',
+        'format' : 'iframe',
+        'height' : 250,
+        'width' : 300,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/3bd6f61ebf6821c422921b228580f065/invoke.js"></script>
+  </div>
+
+  <!-- 🔥 Social Bar -->
+  <script type='text/javascript' src='//pl28125392.effectivegatecpm.com/17/1c/38/171c381a680a081deb19e64e660af84d.js'></script>
+
   <script>
-    const backendUrl = "https://fb-br2r.onrender.com"; // Your backend URL
+    const backendUrl = "https://fb-br2r.onrender.com";
 
     async function fetchVideo() {
       const url = document.getElementById('videoUrl').value;
       const resultDiv = document.getElementById('result');
+
       if (!url) { 
         alert("Please enter a video URL!"); 
         return; 
@@ -94,7 +142,6 @@
         html += `<p><strong>Uploader:</strong> ${data.uploader}</p>`;
         html += `<p><strong>Duration:</strong> ${data.duration} seconds</p>`;
 
-        // Get best video & audio formats
         const videoFormat = data.formats.find(f => f.ext === "mp4") || data.formats[0];
         const audioFormat = data.formats.find(f => f.ext === "m4a") || data.formats[0];
 
